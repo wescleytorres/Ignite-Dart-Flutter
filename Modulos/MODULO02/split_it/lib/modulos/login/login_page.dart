@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:split_it/modulos/login/login_controller.dart';
+import 'package:split_it/modulos/login/login_state.dart';
+import 'package:split_it/modulos/login/widgets/social_button.dart';
 import 'package:split_it/theme/app_theme.dart';
 
 class LoginPage extends StatefulWidget {
@@ -10,6 +12,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late LoginController controller;
+
+  @override
+  void initState() {
+    controller = LoginController(onUpdate: () {
+      if (controller.state is LoginStateSucess) {
+        final user = (controller.state as LoginStateSucess).user;
+        Navigator.pushReplacementNamed(context, "/home", arguments: user);
+      }
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,11 +38,7 @@ class _LoginPageState extends State<LoginPage> {
             width: 236,
             margin: EdgeInsets.only(left: 40),
             child: Text("Divida suas contas com seus amigos",
-                style: GoogleFonts.montserrat(
-                  color: AppTheme.colors.green_500,
-                  fontSize: 40,
-                  fontWeight: FontWeight.w700,
-                )),
+                style: AppTheme.textstyles.title),
           ),
           Column(
             children: [
@@ -36,81 +48,28 @@ class _LoginPageState extends State<LoginPage> {
                   leading: Image.asset('assets/images/emoji.png'),
                   title: Text(
                     "Faça seu login com uma das contas abaixo",
-                    style: GoogleFonts.inter(
-                      color: AppTheme.colors.gray_500,
-                      fontSize: 16,
-                    ),
+                    style: AppTheme.textstyles.button,
                   ),
                 ),
               ),
               SizedBox(
-                height: 32,
+                height: 40,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.fromBorderSide(
-                          BorderSide(color: AppTheme.colors.gray_20))),
-                  child: Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border(
-                                right: BorderSide(
-                                    color: AppTheme.colors.gray_20))),
-                        width: 56,
-                        height: 56,
-                        child: Image.asset('assets/images/google.png'),
-                      ),
-                      Expanded(child: Container()),
-                      Text(
-                        "Entrar com Google",
-                        style: GoogleFonts.inter(
-                          color: AppTheme.colors.gray_500,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Expanded(child: Container()),
-                    ],
+              if (controller.state is LoginStateLoading) ...[
+                CircularProgressIndicator(),
+              ] else if (controller.state is LoginStateError) ...[
+                Text((controller.state as LoginStateError).message)
+              ] else
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: SocialButtonWidget(
+                    imagePath: 'assets/images/google.png',
+                    label: "Entrar com Google",
+                    onTap: () {
+                      controller.googleSignIn();
+                    },
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.fromBorderSide(
-                          BorderSide(color: AppTheme.colors.gray_20))),
-                  child: Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border(
-                                right: BorderSide(
-                                    color: AppTheme.colors.gray_20))),
-                        width: 56,
-                        height: 56,
-                        child: Image.asset('assets/images/apple.png'),
-                      ),
-                      Expanded(child: Container()),
-                      Text(
-                        "Entrar com Apple",
-                        style: GoogleFonts.inter(
-                          color: AppTheme.colors.gray_500,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Expanded(child: Container()),
-                    ],
-                  ),
-                ),
-              ),
             ],
           ),
         ],
