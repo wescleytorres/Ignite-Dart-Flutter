@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.only(left: 30, right: 40),
                 child: ListTile(
-                  leading: Image.asset('assets/images/emoji.png'),
+                  leading: Image.asset('assets/icons/emoji.png'),
                   title: Text(
                     "Faça seu login com uma das contas abaixo",
                     style: AppTheme.textstyles.button,
@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: SocialButtonWidget(
-                    imagePath: 'assets/images/google.png',
+                    imagePath: 'assets/icons/google.png',
                     label: "Entrar com Google",
                     onTap: () {
                       controller.googleSignIn();
