@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'package:split_it/theme/app_theme.dart';
+import 'package:split_it/modulos/create_split/widgets/step_input_text.dart';
+import 'package:split_it/modulos/create_split/widgets/step_title_widget.dart';
 
 class StepOnePage extends StatefulWidget {
   final void Function(String value) onChange;
@@ -18,48 +18,9 @@ class _StepOnePageState extends State<StepOnePage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text.rich(
-          TextSpan(
-              text: "Qual o nome",
-              style: AppTheme.textstyles.titleStepper,
-              children: [
-                TextSpan(
-                    text: "\ndo evento?",
-                    style: AppTheme.textstyles.subtitleStepper)
-              ]),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(
-          height: 40,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 64),
-          child: TextField(
-            onChanged: widget.onChange,
-            textAlign: TextAlign.center,
-            style: AppTheme.textstyles.textfieldStepper,
-            cursorColor: AppTheme.colors.gray_500,
-            decoration: InputDecoration(
-              hintText: "Ex: Churrasco",
-              hintStyle: AppTheme.textstyles.placeholderStepper,
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: AppTheme.colors.gray_600.withOpacity(0.2),
-                ),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: AppTheme.colors.gray_600.withOpacity(0.2),
-                ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: AppTheme.colors.gray_600.withOpacity(0.2),
-                ),
-              ),
-            ),
-          ),
-        ),
+        StepTitleWidget(title: "Qual o nome", subtitle: "do evento?"),
+        StepInputTextWidget(
+            onChange: widget.onChange, hintText: "Ex: Churrasco"),
       ],
     );
   }

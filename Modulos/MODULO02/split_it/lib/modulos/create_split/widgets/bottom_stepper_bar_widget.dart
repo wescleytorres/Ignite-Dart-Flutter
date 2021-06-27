@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:split_it/modulos/create_split/widgets/stepperButtonWidget.dart';
+import 'package:split_it/modulos/create_split/widgets/stepper_button_widget.dart';
 import 'package:split_it/theme/app_theme.dart';
 
 class BottomStepperBarWidget extends StatelessWidget {
