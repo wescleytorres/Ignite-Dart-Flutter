@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:split_it/modulos/create_split/create_split_controller.dart';
+import 'package:split_it/modulos/create_split/step/one/step_one_page.dart';
+import 'package:split_it/modulos/create_split/widgets/bottom_stepper_bar.dart';
+import 'package:split_it/modulos/create_split/widgets/create_split_appbar.dart';
+import 'package:split_it/theme/app_theme.dart';
 
 class CreateSplitPage extends StatefulWidget {
   const CreateSplitPage({Key? key}) : super(key: key);
@@ -8,17 +13,28 @@ class CreateSplitPage extends StatefulWidget {
 }
 
 class _CreateSplitPageState extends State<CreateSplitPage> {
-  final pages = [
-    Container(
-      color: Colors.red,
-    ),
-    Container(
-      color: Colors.yellow,
-    ),
-    Container(
-      color: Colors.green,
-    ),
-  ];
+  final controller = CreateSplitController();
+
+  late List<Widget> pages;
+
+  @override
+  void initState() {
+    pages = [
+      StepOnePage(
+        onChange: (value) {
+          controller.setEventName(value);
+          setState(() {});
+        },
+      ),
+      Container(
+        color: Colors.yellow,
+      ),
+      Container(
+        color: Colors.green,
+      ),
+    ];
+    super.initState();
+  }
 
   var index = 0;
 
@@ -37,32 +53,18 @@ class _CreateSplitPageState extends State<CreateSplitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        child: SafeArea(
-          top: true,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    prevPage();
-                  }),
-              Text("${index + 1} - ${pages.length}")
-            ],
-          ),
-        ),
-        preferredSize: Size.fromHeight(60),
+      backgroundColor: AppTheme.colors.white,
+      appBar: CreateSplitAppbarWidget(
+        actualPage: index,
+        onTapBack: prevPage,
+        size: pages.length,
       ),
       body: pages[index],
-      floatingActionButton: index < 2
-          ? FloatingActionButton(
-              onPressed: () {
-                nextPage();
-              },
-              child: Icon(Icons.add),
-            )
-          : Container(),
+      bottomNavigationBar: BottomStepperBarWidget(
+        enabledButtons: controller.enableNavigateButton(),
+        onTapNext: nextPage,
+        onTapCancel: () {},
+      ),
     );
   }
 }
