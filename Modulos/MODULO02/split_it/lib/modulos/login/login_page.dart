@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:split_it/modulos/login/login_controller.dart';
 import 'package:split_it/modulos/login/login_service.dart';
 import 'package:split_it/modulos/login/login_state.dart';
@@ -18,14 +20,14 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     controller = LoginController(
-        service: LoginServiceImpl(),
-        onUpdate: () {
-          if (controller.state is LoginStateSucess) {
-            final user = (controller.state as LoginStateSucess).user;
-            Navigator.pushReplacementNamed(context, "/home", arguments: user);
-          }
-          setState(() {});
-        });
+      service: LoginServiceImpl(),
+    );
+    autorun((_) {
+      if (controller.state is LoginStateSucess) {
+        final user = (controller.state as LoginStateSucess).user;
+        Navigator.pushReplacementNamed(context, "/home", arguments: user);
+      }
+    });
     super.initState();
   }
 
@@ -58,21 +60,23 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 40,
               ),
-              if (controller.state is LoginStateLoading) ...[
-                CircularProgressIndicator(),
-              ] else if (controller.state is LoginStateError) ...[
-                Text((controller.state as LoginStateError).message)
-              ] else
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: SocialButtonWidget(
-                    imagePath: 'assets/icons/google.png',
-                    label: "Entrar com Google",
-                    onTap: () {
-                      controller.googleSignIn();
-                    },
-                  ),
-                ),
+              Observer(builder: (context) {
+                if (controller.state is LoginStateLoading)
+                  return CircularProgressIndicator();
+                else if (controller.state is LoginStateError)
+                  return Text((controller.state as LoginStateError).message);
+                else
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: SocialButtonWidget(
+                      imagePath: 'assets/icons/google.png',
+                      label: "Entrar com Google",
+                      onTap: () {
+                        controller.googleSignIn();
+                      },
+                    ),
+                  );
+              }),
             ],
           ),
         ],

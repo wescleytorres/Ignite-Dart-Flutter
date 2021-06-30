@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:split_it/modulos/create_split/create_split_controller.dart';
 import 'package:split_it/theme/app_theme.dart';
 
 class CreateSplitAppbarWidget extends PreferredSize {
   final VoidCallback onTapBack;
-  final int actualPage;
+  final CreateSplitController controller;
   final int size;
   CreateSplitAppbarWidget(
-      {required this.actualPage, required this.onTapBack, required this.size})
+      {required this.controller, required this.onTapBack, required this.size})
       : super(
             child: SafeArea(
               top: true,
@@ -21,19 +23,22 @@ class CreateSplitAppbarWidget extends PreferredSize {
                       onPressed: onTapBack),
                   Padding(
                     padding: const EdgeInsets.only(right: 24),
-                    child: Text.rich(
-                      TextSpan(children: [
-                        TextSpan(
-                          text: "0${actualPage + 1}",
-                          style: AppTheme.textstyles.stepperIndicatorPrimary,
-                        ),
-                        TextSpan(
-                          text: " - 0$size",
-                          style: AppTheme.textstyles.stepperIndicatorSecondary,
-                        )
-                      ]),
-                      textAlign: TextAlign.center,
-                    ),
+                    child: Observer(
+                        builder: (_) => Text.rich(
+                              TextSpan(children: [
+                                TextSpan(
+                                  text: "0${controller.currentPage + 1}",
+                                  style: AppTheme
+                                      .textstyles.stepperIndicatorPrimary,
+                                ),
+                                TextSpan(
+                                  text: " - 0$size",
+                                  style: AppTheme
+                                      .textstyles.stepperIndicatorSecondary,
+                                )
+                              ]),
+                              textAlign: TextAlign.center,
+                            )),
                   ),
                 ],
               ),
