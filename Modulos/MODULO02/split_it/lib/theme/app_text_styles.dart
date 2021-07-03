@@ -22,6 +22,8 @@ abstract class AppTextStyles {
   TextStyle get subtitleStepper;
   TextStyle get placeholderStepper;
   TextStyle get textfieldStepper;
+  TextStyle get personSelectedStepper;
+  TextStyle get personNotSelectedStepper;
 }
 
 class AppTextStylesDefault implements AppTextStyles {
@@ -140,5 +142,19 @@ class AppTextStylesDefault implements AppTextStyles {
         color: AppTheme.colors.gray_600,
         fontSize: 16,
         fontWeight: FontWeight.w500,
+      );
+
+  @override
+  TextStyle get personSelectedStepper => GoogleFonts.inter(
+        color: AppTheme.colors.gray_600,
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      );
+
+  @override
+  TextStyle get personNotSelectedStepper => GoogleFonts.inter(
+        color: AppTheme.colors.gray_500,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
       );
 }
