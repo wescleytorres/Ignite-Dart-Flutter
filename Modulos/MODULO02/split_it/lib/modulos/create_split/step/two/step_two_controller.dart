@@ -1,4 +1,5 @@
 import 'package:mobx/mobx.dart';
+import 'package:split_it/modulos/create_split/create_split_controller.dart';
 import 'package:split_it/shared/models/friend_model.dart';
 import 'package:split_it/shared/repositories/firebase_repository.dart';
 part 'step_two_controller.g.dart';
@@ -6,7 +7,13 @@ part 'step_two_controller.g.dart';
 class StepTwoController = _StepTwoControllerBase with _$StepTwoController;
 
 abstract class _StepTwoControllerBase with Store {
+  final CreateSplitController controller;
   final repository = FirebaseRepository();
+  _StepTwoControllerBase({required this.controller}) {
+    autorun((_) {
+      controller.setSelectedFriends(_selectedFriends);
+    });
+  }
 
   @observable
   List<FriendModel> _friends = [];
